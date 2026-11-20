@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const db = require('../../db.js');
+const db = require('../../db/index.js');
 const middlewareSeg = require('../middlewareSeg.js');
 
 router.get('/',middlewareSeg({rol: 'admin'}), (req, res, next) => {
