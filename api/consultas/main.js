@@ -32,23 +32,20 @@ router.post('/', middlewareSeg({ rol: 'cliente' }), (req, res) => {
     const { nombre, telefono, correo_electronico, asunto, mensaje } = req.body
     const usuario_id = req.usuario.usuario_id
 
-    const sql = `
-    INSERT INTO consulta
-    (usuario_id, nombre, telefono, correo_electronico, asunto, mensaje)
-    VALUES (?, ?, ?, ?, ?, ?)
-  `
+    const sql = ` INSERT INTO consulta (usuario_id, nombre, telefono, correo_electronico, asunto, mensaje) VALUES (?, ?, ?, ?, ?, ?)`
+
 
     db.query(sql, [usuario_id, nombre, telefono, correo_electronico, asunto, mensaje])
-        .then(([result]) => {
+        .then(() => {
             res.status(201).json({
                 message: 'Consulta creada exitosamente',
-                consulta_id: result.insertId
             })
         })
         .catch((error) => {
             console.log(error)
             res.status(500).json({ message: 'Error al crear la consulta' })
         })
+
 })
 
 // Editar consulta
@@ -57,11 +54,7 @@ router.put('/:consulta_id', middlewareSeg({ rol: 'cliente' }), (req, res) => {
     const { asunto, mensaje } = req.body
     const usuario_id = req.usuario.usuario_id
 
-    const sql = `
-    UPDATE consulta
-    SET asunto = ?, mensaje = ?
-    WHERE consulta_id = ? AND usuario_id = ?
-  `
+    const sql = `UPDATE consulta SET asunto = ?, mensaje = ? WHERE consulta_id = ? AND usuario_id = ?`
 
     db.query(sql, [asunto, mensaje, consulta_id, usuario_id])
         .then(([result]) => {
@@ -82,10 +75,8 @@ router.delete('/:consulta_id', middlewareSeg({ rol: 'cliente' }), (req, res) => 
     const { consulta_id } = req.params
     const usuario_id = req.usuario.usuario_id
 
-    const sql = `
-    DELETE FROM consulta
-    WHERE consulta_id = ? AND usuario_id = ?
-  `
+
+    const sql = 'DELETE FROM consulta WHERE consulta_id = ? AND usuario_id = ?'
 
     db.query(sql, [consulta_id, usuario_id])
         .then(([result]) => {
@@ -99,6 +90,7 @@ router.delete('/:consulta_id', middlewareSeg({ rol: 'cliente' }), (req, res) => 
             console.log(error)
             res.status(500).json({ message: 'Error al eliminar la consulta' })
         })
+
 })
 
 module.exports = router
